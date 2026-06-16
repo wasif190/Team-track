@@ -58,9 +58,13 @@ const userSchema = new Schema(
 
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
-  
+
   // overwriting existing pasword (normal text to hash password)
   this.password = await bcrypt.hash(this.password, 10);
 });
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const User = mongoose.model('Users', userSchema);
