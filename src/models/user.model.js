@@ -26,7 +26,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      email: unique,
+      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -105,4 +105,4 @@ userSchema.methods.generateTemporaryToken = function () {
   return { unHashedToken, hashedToken, tokenExpiry };
 };
 
-const User = mongoose.model('Users', userSchema);
+export const User = mongoose.model('Users', userSchema);
