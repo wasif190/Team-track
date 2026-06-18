@@ -44,7 +44,7 @@ const emailVerificationMailgenContent = (username, verificationUrl) => {
     body: {
       name: username,
       intro: "Welcome to our app!, we're excited to have you on board.",
-      actions: {
+      action: {
         instructions: 'To verify your email please click on the following button.',
         button: {
           color: '#22BC66',
@@ -62,7 +62,7 @@ const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
     body: {
       name: username,
       intro: 'We got a request to reset the password of your account',
-      actions: {
+      action: {
         instructions: 'To reset your password click on the following button or link',
         button: {
           color: '#22BC66',

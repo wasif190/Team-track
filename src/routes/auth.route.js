@@ -33,14 +33,14 @@ router
   .post(userForgotPasswordValidator(), validate, forgotPasswordRequest);
 router
   .route('/reset-password/:resetToken')
-  .post(userResetForgotPasswordValidator, validate, resetForgotPassword);
+  .post(userResetForgotPasswordValidator(), validate, resetForgotPassword);
 
 // secure routes - required verifyJWT
 router.route('/logout').post(verifyJWT, logoutUser);
-router.route('/corrent-user').post(verifyJWT, getCurrentUser);
+router.route('/corrent-user').get(verifyJWT, getCurrentUser);
 router
   .route('/change-password')
-  .post(verifyJWT, userChangeCurrentPasswordValidator, validate, changeCurrentPassword);
+  .post(verifyJWT, userChangeCurrentPasswordValidator(), validate, changeCurrentPassword);
 router.route('/resend-email-verification').post(verifyJWT, resendEmailVerification);
 
 export default router;
