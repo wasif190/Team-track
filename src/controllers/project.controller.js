@@ -9,9 +9,60 @@ import { User } from '../models/user.model.js';
 
 const getProject = asyncHandler(async (req, res) => {
   /*
-   suppose: req.user._id = U1 is logged in
-   Goal: Give me all projects in which U1 participates, along with his role and the number of members in each project.
-   */
+    1. Find all projects of the current user.
+    2. Fetch each project's details.
+    3. Count how many members each project has and return only the required fields.
+  */
+
+  const projects = await ProjectMember.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(req.user._id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'projects',
+        localField: 'project',
+        foreignField: '_id',
+        as: 'projects',
+        pipeline: [
+          {
+            $lookup: {
+              from: 'projectmembers',
+              localField: '_id',
+              foreignField: 'project',
+              as: 'projectmembers',
+            },
+          },
+          {
+            $addFields: {
+              members: {
+                $size: '$projectmembers',
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: '$projects',
+    },
+    {
+      $project: {
+        project: {
+          _id: '$projects._id',
+          name: '$projects.name',
+          description: '$projects.description',
+          members: '$projects.members',
+          createdAt: '$projects.createdAt',
+          createdBy: '$projects.createdBy',
+        },
+        role: 1,
+        _id: 0,
+      },
+    },
+  ]);
 });
 
 const getProjectById = asyncHandler(async (req, res) => {});
