@@ -279,4 +279,5 @@ export {
   addMembersToProject,
   updateMemberRole,
   deleteMember,
+  getProjectMembers
 };
